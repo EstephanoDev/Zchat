@@ -9,10 +9,11 @@ import MeetingModal from './MeetingModal';
 import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk';
 import { useUser } from '@clerk/nextjs';
 import Loader from './Loader';
-import { Textarea } from './ui/textarea';
+import { Textarea } from '../ui/textarea';
 import ReactDatePicker from 'react-datepicker';
-import { useToast } from './ui/use-toast';
-import { Input } from './ui/input';
+import { useToast } from '../ui/use-toast';
+import { Input } from '../ui/input';
+import { Card, CardContent, CardTitle } from '../ui/card';
 
 const initialValues = {
   dateTime: new Date(),
@@ -68,36 +69,41 @@ const MeetingTypeList = () => {
   if (!client || !user) return <Loader />;
 
   const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${callDetail?.id}`;
+  
+  const organization = [
+    {
+      id: '1',
+      description: 'Escuela de Medicina',
+    },
+    {
+      id: '2',
+      description: 'Morados Vip',
+    },
+    {
+      id: '3',
+      description: 'Trabajo',
+    },
+  ]
 
   return (
-    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-      <HomeCard
-        img="/icons/add-meeting.svg"
-        title="New Meeting"
-        description="Start an instant meeting"
-        handleClick={() => setMeetingState('isInstantMeeting')}
-      />
+    <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4 p-2">
       <HomeCard
         img="/icons/join-meeting.svg"
-        title="Join Meeting"
-        description="via invitation link"
-        className="bg-blue-1"
-        handleClick={() => setMeetingState('isJoiningMeeting')}
+        title="Unete a una Organizacion"
+        organization={organization}
+        className="bg-blue-1 "
       />
-      <HomeCard
-        img="/icons/schedule.svg"
-        title="Schedule Meeting"
-        description="Plan your meeting"
-        className="bg-purple-1"
-        handleClick={() => setMeetingState('isScheduleMeeting')}
-      />
-      <HomeCard
-        img="/icons/recordings.svg"
-        title="View Recordings"
-        description="Meeting Recordings"
-        className="bg-yellow-1"
-        handleClick={() => router.push('/recordings')}
-      />
+      <Card onClick={() =>setMeetingState('isInstantMeeting')} className="bg-blue-1 cursor-pointer">
+        <CardContent className="flex flex-col gap-2">
+          <CardTitle className="text-2xl font-mono p-2">Crear Meeting</CardTitle>
+        </CardContent>
+      </Card>
+      <Card className="bg-blue-1 cursor-pointer" onClick={() => setMeetingState('isJoiningMeeting')}>
+        <CardContent className="flex flex-col gap-2">
+          <CardTitle className="text-2xl font-mono p-2">Unirse Meeting</CardTitle>
+        </CardContent>
+      </Card>
+
 
       {!callDetail ? (
         <MeetingModal
